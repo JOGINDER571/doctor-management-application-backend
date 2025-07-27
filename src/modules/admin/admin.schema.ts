@@ -63,3 +63,4 @@ export const transformDoctorData = (
 };
 
 export type CreateUserInput = z.infer<typeof loginAdminSchema>;
+export type DoctorSchemaInput = z.infer<typeof createDoctorSchema>;

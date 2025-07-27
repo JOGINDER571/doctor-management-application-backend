@@ -4,6 +4,7 @@ export const UserService = {
   getProfile: (id: number) => prisma.user.findUnique({ where: { id } }),
   create: (data: any) => prisma.user.create({ data }),
   getUser: (email: string) => prisma.user.findUnique({ where: { email } }),
+  getAllUsers: () => prisma.user.findMany(),
   update: (data: any, id: number) =>
     prisma.user.update({ where: { id }, data }),
   bookAppointment: (data: any) => prisma.appointment.create({ data }),
@@ -15,4 +16,31 @@ export const UserService = {
       },
     });
   },
+  getAppointments: (userId: number) => {
+    return prisma.appointment.findMany({
+      where: { userId },
+    });
+  },
+  getAppointment: (appointmentId: number) => {
+    return prisma.appointment.findUnique({
+      where: { id: appointmentId },
+    });
+  },
+  cancelAppointment: (appointmentId: number) => {
+    return prisma.appointment.update({
+      where: { id: appointmentId },
+      data: { cancelled: true },
+    });
+  },
+  updateAppointment: (appointmentId: number) => {
+    return prisma.appointment.update({
+      where: { id: appointmentId },
+      data: { payment: true },
+    });
+  },
+
+  getAllAppointments: () => {
+    return prisma.appointment.findMany();
+  },
+  
 };

@@ -1,5 +1,12 @@
 import express from "express";
-import { createDoctor, doctorList, loginAdmin } from "./admin.controller";
+import {
+  appointmentData,
+  cancelAppointment,
+  createDoctor,
+  dashboard,
+  doctorList,
+  loginAdmin,
+} from "./admin.controller";
 import { validatePayload } from "../../middlewares/validatePayload";
 import {
   createDoctorSchema,
@@ -26,5 +33,10 @@ router.post(
 router.get("/doctors", doctorList);
 
 router.put("/change-doctor-availability", changeAvailability);
+
+router.get("/dashboard", dashboard);
+router.get("/appointments", appointmentData);
+
+router.put("/cancel-appointment", cancelAppointment);
 
 export default router;

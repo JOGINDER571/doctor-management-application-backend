@@ -5,6 +5,10 @@ import {
   login,
   updateUserProfile,
   bookAppointment,
+  getUserAppointments,
+  cancelAppointment,
+  razorpayPayment,
+  verifyPayment,
 } from "./user.controller";
 import { validatePayload } from "../../middlewares/validatePayload";
 import {
@@ -19,7 +23,9 @@ import { upload, uploadToCloudinary } from "../../middlewares/multer";
 const router = express.Router();
 router.post("/create-user", validatePayload(createUserSchema), createUser);
 router.post("/login", validatePayload(loginUserSchema), login);
+
 router.use(authUser);
+
 router.get("/profile", getUserProfile);
 router.put(
   "/update-profile",
@@ -35,5 +41,10 @@ router.post(
   validatePayload(bookAppointmentSchema),
   bookAppointment
 );
+
+router.get("/appointments", getUserAppointments);
+router.put("/appointment-cancel", cancelAppointment);
+router.post("/payment-razorpay", razorpayPayment);
+router.post("/verify-payment", verifyPayment);
 
 export default router;

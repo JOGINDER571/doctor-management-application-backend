@@ -1,7 +1,15 @@
 import { prisma } from "../../config/db";
 
 export const DoctorService = {
-  getDoctor: (id: number) => prisma.doctor.findUnique({ where: { id } }),
+  getDoctor: ({ id, email }: { id?: number; email?: string }) => {
+    if (id) {
+      return prisma.doctor.findUnique({ where: { id } });
+    } else if (email) {
+      return prisma.doctor.findUnique({ where: { email } });
+    } else {
+      throw new Error("Either id or email must be provided");
+    }
+  },
   updateAvailability: async (id: number) => {
     const doctor = await prisma.doctor.findUnique({
       where: { id },
