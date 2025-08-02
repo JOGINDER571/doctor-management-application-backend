@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 interface AuthenticatedRequest extends Request {
   userId?: string;
+  docId?: string;
 }
 
 export const authAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +41,41 @@ export const authAdmin = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+export const authDoctor = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { dtoken } = req.headers;
+    if (!dtoken) {
+      return handleControllerError(
+        res,
+        new CustomError(ERROR_CODES.AUTHENTICATION.UNAUTHORIZED, [
+          "token not found",
+        ])
+      );
+    }
+    const tokenDecode = jwt.verify(
+      dtoken as string,
+      process.env.JWT_SECRET as string
+    );
+
+    if (!tokenDecode) {
+      return handleControllerError(
+        res,
+        new CustomError(ERROR_CODES.AUTHENTICATION.UNAUTHORIZED, [
+          "token not found",
+        ])
+      );
+    }
+    req.docId = tokenDecode as string;
+    next();
+  } catch (error) {
+    handleControllerError(res, error);
+  }
+};
+
 export const authUser = (
   req: AuthenticatedRequest,
   res: Response,
@@ -66,10 +102,10 @@ export const authUser = (
       );
     }
     req.userId = tokenDecode as string;
-    console.log(tokenDecode)
+    console.log(tokenDecode);
     next();
   } catch (error) {
-    console.log('hello')
+    console.log("hello");
     handleControllerError(res, error);
   }
 };

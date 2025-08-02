@@ -1,15 +1,8 @@
 import { prisma } from "../../config/db";
 
 export const DoctorService = {
-  getDoctor: ({ id, email }: { id?: number; email?: string }) => {
-    if (id) {
-      return prisma.doctor.findUnique({ where: { id } });
-    } else if (email) {
-      return prisma.doctor.findUnique({ where: { email } });
-    } else {
-      throw new Error("Either id or email must be provided");
-    }
-  },
+  getDoctor: (id: number) => prisma.doctor.findUnique({ where: { id } }),
+  getDoctorByEmail: (email: string) => prisma.doctor.findUnique({ where: { email } }),
   updateAvailability: async (id: number) => {
     const doctor = await prisma.doctor.findUnique({
       where: { id },
@@ -23,6 +16,10 @@ export const DoctorService = {
       data: { available: !doctor.available },
     });
   },
+  updateDoctor: (id: number, attr:any) => prisma.doctor.update({
+    where: { id },
+    data: { ...attr },
+  }),
   getAll: () =>
     prisma.doctor.findMany({
       select: {
@@ -41,4 +38,11 @@ export const DoctorService = {
         createdAt: true,
       },
     }),
+  getAppointments: (docId:number) => prisma.appointment.findMany({where: { docId }}),   
+  appointment: (appointmentId:number) => prisma.appointment.findUnique({where:{id:appointmentId}}),
+  updateAppointment: (appointmentId: number,attr:any) =>
+  prisma.appointment.update({
+    where: { id: appointmentId },
+    data: { ...attr },
+  }),
 };
