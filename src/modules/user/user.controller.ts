@@ -224,10 +224,7 @@ export const cancelAppointment = async (
         new CustomError(ERROR_CODES.AUTHENTICATION.UNAUTHORIZED)
       );
     }
-    const doctor = await DoctorService.getDoctor({
-      id: appointment.docId,
-      email: "",
-    });
+    const doctor = await DoctorService.getDoctor(appointment.docId);
     if (!doctor) {
       return handleControllerError(
         res,

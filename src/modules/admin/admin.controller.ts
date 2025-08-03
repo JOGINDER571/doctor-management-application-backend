@@ -162,10 +162,7 @@ export const cancelAppointment = async (req: Request, res: Response) => {
       );
     }
 
-    const doctor = await DoctorService.getDoctor({
-      id: appointment.docId,
-      email: "",
-    });
+    const doctor = await DoctorService.getDoctor(appointment.docId);
     if (!doctor) {
       return handleControllerError(
         res,
